@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>EduNext — Online Learning Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════
+   CSS VARIABLES & RESET
+═══════════════════════════════════════════════════════ */
+:root{
+  --blue:#0A4FD4;--blue-mid:#1A6BFF;--blue-light:#EEF4FF;
+  --teal:#00B8A0;--teal-dark:#007A6B;
+  --ink:#0B0F1A;--ink-60:rgba(11,15,26,.6);--ink-30:rgba(11,15,26,.3);
+  --white:#FFFFFF;--surface:#F5F7FF;--card:#FFFFFF;
+  --border:rgba(11,15,26,.1);
+  --radius:14px;--radius-sm:8px;--radius-lg:22px;
+  --font-display:'Syne',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+  --shadow:0 2px 12px rgba(10,79,212,.10);
+  --shadow-lg:0 8px 40px rgba(10,79,212,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);color:var(--ink);background:var(--white);overflow-x:hidden;}
+img{max-width:100%;}
+h1,h2,h3,h4{font-family:var(--font-display);}
+
+/* ═══════════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);font-size:14px;font-weight:500;border:none;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap;}
+.btn-primary{background:var(--blue);color:#fff;padding:12px 24px;border-radius:50px;box-shadow:0 4px 16px rgba(10,79,212,.3);}
+.btn-primary:hover{background:var(--blue-mid);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--blue);padding:11px 22px;border-radius:50px;border:1.5px solid var(--blue);}
+.btn-outline:hover{background:var(--blue-light);}
+.btn-white{background:#fff;color:var(--blue);padding:12px 24px;border-radius:50px;box-shadow:0 4px 20px rgba(0,0,0,.12);}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;letter-spacing:.03em;}
+.badge-blue{background:var(--blue-light);color:var(--blue);}
+.badge-teal{background:#E0F8F5;color:var(--teal-dark);}
+.badge-green{background:#E8F8EE;color:#1A7A3F;}
+.badge-orange{background:#FFF0E6;color:#C45E00;}
+.section{padding:60px 0;}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;}
+.gradient-text{background:linear-gradient(135deg,var(--blue) 0%,var(--teal) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.progress-bar-wrap{height:5px;background:#EEF4FF;border-radius:3px;margin-top:8px;}
+.progress-bar{height:5px;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--teal));}
+
+/* ═══════════════════════════════════════════════════════
+   PAGES
+═══════════════════════════════════════════════════════ */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════════════════════════════
+   NAV — DESKTOP + MOBILE
+═══════════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.nav-logo{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--blue);text-decoration:none;cursor:pointer;flex-shrink:0;}
+.nav-logo span{color:var(--teal);}
+.nav-links{display:flex;align-items:center;gap:2px;}
+.nav-link{font-size:13px;font-weight:500;color:var(--ink-60);padding:7px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;font-family:var(--font-body);transition:all .15s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(--blue);background:var(--blue-light);}
+.nav-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+
+/* Hamburger */
+.nav-hamburger{display:none;flex-direction:column;justify-content:center;align-items:center;width:40px;height:40px;gap:5px;cursor:pointer;border:none;background:transparent;border-radius:8px;padding:4px;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;transition:all .3s;}
+.nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* Mobile drawer */
+.nav-drawer{display:none;position:fixed;top:60px;left:0;right:0;background:#fff;border-bottom:1px solid var(--border);z-index:999;flex-direction:column;padding:12px 20px 20px;gap:4px;box-shadow:0 8px 32px rgba(0,0,0,.12);}
+.nav-drawer.open{display:flex;}
+.nav-drawer-link{font-size:15px;font-weight:500;color:var(--ink-60);padding:12px 14px;border-radius:10px;cursor:pointer;border:none;background:transparent;font-family:var(--font-body);text-align:left;width:100%;transition:all .15s;}
+.nav-drawer-link:hover,.nav-drawer-link.active{color:var(--blue);background:var(--blue-light);}
+.nav-drawer-actions{display:flex;gap:10px;margin-top:8px;padding-top:12px;border-top:1px solid var(--border);}
+.nav-drawer-actions .btn{flex:1;}
+
+/* ═══════════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════════ */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:10px;white-space:nowrap;max-width:calc(100vw - 40px);}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+
+/* ═══════════════════════════════════════════════════════
+   HOME — HERO
+═══════════════════════════════════════════════════════ */
+.hero{min-height:100svh;background:linear-gradient(160deg,#EEF4FF 0%,#F0FFFE 50%,#FAFBFF 100%);display:flex;align-items:center;position:relative;overflow:hidden;padding-top:60px;}
+.hero-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.3;}
+.hero-blob1{width:500px;height:500px;background:radial-gradient(circle,#A8C4FF,transparent);top:-100px;right:-100px;}
+.hero-blob2{width:350px;height:350px;background:radial-gradient(circle,#A0F0E8,transparent);bottom:-50px;left:-50px;}
+.hero-content{position:relative;z-index:1;width:100%;max-width:1100px;margin:0 auto;padding:60px 20px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--blue);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;background:var(--blue-light);padding:5px 12px;border-radius:20px;}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--teal);display:block;flex-shrink:0;}
+.hero h1{font-size:46px;font-weight:800;line-height:1.1;margin-bottom:16px;color:var(--ink);}
+.hero p{font-size:16px;line-height:1.7;color:var(--ink-60);margin-bottom:28px;max-width:440px;}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:24px;margin-top:36px;flex-wrap:wrap;}
+.stat-num{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--ink);}
+.stat-label{font-size:11px;color:var(--ink-60);margin-top:2px;}
+.hero-visual{position:relative;}
+.hero-card-main{background:#fff;border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-lg);border:1px solid rgba(10,79,212,.08);}
+.course-preview-list{display:flex;flex-direction:column;gap:10px;}
+.course-preview-item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--surface);cursor:pointer;transition:all .15s;}
+.course-preview-item:hover{background:var(--blue-light);}
+.course-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.hero-float{position:absolute;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 8px 28px rgba(10,79,212,.18);border:1px solid rgba(10,79,212,.08);font-size:12px;font-weight:500;white-space:nowrap;}
+.hero-float1{bottom:-16px;left:-20px;display:flex;align-items:center;gap:8px;}
+.hero-float2{top:-8px;right:-14px;display:flex;align-items:center;gap:8px;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.pulse{animation:pulse 2s infinite;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade-up{animation:fadeUp .5s ease forwards;}
+.fade-up-1{animation-delay:.1s;opacity:0;}
+.fade-up-2{animation-delay:.2s;opacity:0;}
+.fade-up-3{animation-delay:.3s;opacity:0;}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLLING STRIP
+═══════════════════════════════════════════════════════ */
+.features-strip{background:var(--ink);padding:32px 0;overflow:hidden;}
+.strip-track{display:flex;gap:48px;animation:scroll 28s linear infinite;width:max-content;}
+.strip-item{display:flex;align-items:center;gap:10px;color:#fff;font-size:14px;font-weight:500;white-space:nowrap;opacity:.8;}
+.strip-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════════════════
+   SECTION HEADERS
+═══════════════════════════════════════════════════════ */
+.section-header{text-align:center;margin-bottom:20px;}
+.section-header h2{font-size:36px;font-weight:800;margin-bottom:12px;line-height:1.15;}
+.section-header p{font-size:15px;color:var(--ink-60);max-width:480px;margin:0 auto;}
+
+/* ═══════════════════════════════════════════════════════
+   COURSES GRID
+═══════════════════════════════════════════════════════ */
+.courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
+.course-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .2s;}
+.course-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(10,79,212,.2);}
+.course-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;}
+.course-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.25));}
+.course-body{padding:16px;}
+.course-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.course-title{font-family:var(--font-display);font-size:15px;font-weight:700;margin-bottom:5px;line-height:1.3;}
+.course-instructor{font-size:11px;color:var(--ink-60);margin-bottom:8px;}
+.course-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border);}
+.stars{color:#F59E0B;font-size:11px;}
+.course-modules{font-size:11px;color:var(--ink-60);}
+
+/* ═══════════════════════════════════════════════════════
+   STEPS
+═══════════════════════════════════════════════════════ */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+.step{text-align:center;}
+.step-num{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;font-weight:800;color:#fff;margin:0 auto 16px;}
+.step h3{font-size:17px;font-weight:700;margin-bottom:8px;}
+.step p{font-size:13px;color:var(--ink-60);line-height:1.7;}
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════════════════ */
+.dash-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100svh - 60px);padding-top:60px;}
+.sidebar{background:#fff;border-right:1px solid var(--border);padding:20px 14px;position:sticky;top:60px;height:calc(100svh - 60px);overflow-y:auto;}
+.sidebar-logo{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--blue);margin-bottom:24px;padding:0 8px;}
+.sidebar-logo span{color:var(--teal);}
+.sidebar-section{font-size:10px;font-weight:700;color:var(--ink-30);letter-spacing:.1em;text-transform:uppercase;padding:0 8px;margin:16px 0 6px;}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink-60);margin-bottom:2px;transition:all .15s;border:none;background:transparent;width:100%;text-align:left;font-family:var(--font-body);}
+.sidebar-item svg{flex-shrink:0;opacity:.7;}
+.sidebar-item:hover{background:var(--surface);color:var(--ink);}
+.sidebar-item.active{background:var(--blue-light);color:var(--blue);}
+.sidebar-avatar{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;background:var(--surface);}
+.avatar-circle{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:700;font-size:12px;color:#fff;flex-shrink:0;}
+.avatar-name{font-size:12px;font-weight:600;color:var(--ink);}
+.avatar-role{font-size:10px;color:var(--ink-60);}
+.dash-main{background:var(--surface);padding:24px;}
+.dash-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
+.dash-title{font-family:var(--font-display);font-size:22px;font-weight:800;}
+.dash-subtitle{font-size:13px;color:var(--ink-60);margin-top:2px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
+.stat-card{background:#fff;border-radius:var(--radius);padding:16px;border:1px solid var(--border);}
+.stat-card-label{font-size:11px;color:var(--ink-60);margin-bottom:4px;font-weight:500;}
+.stat-card-val{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--ink);}
+.stat-card-change{font-size:11px;color:#1A7A3F;margin-top:3px;}
+.dash-grid{display:grid;grid-template-columns:1fr 300px;gap:16px;}
+.enrolled-list{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.enrolled-item{background:#fff;border-radius:var(--radius);padding:14px 16px;border:1px solid var(--border);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;}
+.enrolled-item:hover{border-color:rgba(10,79,212,.25);box-shadow:var(--shadow);}
+.enrolled-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.enrolled-info{flex:1;min-width:0;}
+.enrolled-title{font-weight:600;font-size:14px;margin-bottom:3px;}
+.enrolled-meta{font-size:11px;color:var(--ink-60);}
+.enrolled-pct{font-size:11px;font-weight:600;color:var(--blue);text-align:right;margin-bottom:2px;}
+.widget-card{background:#fff;border-radius:var(--radius);padding:16px;border:1px solid var(--border);}
+.widget-title{font-family:var(--font-display);font-size:14px;font-weight:700;margin-bottom:14px;}
+.quiz-result-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.quiz-result-item:last-child{border-bottom:none;}
+.score-pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.score-high{background:#E8F8EE;color:#1A7A3F;}
+.score-mid{background:#FFF0E6;color:#C45E00;}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px;margin-top:10px;}
+.bar{flex:1;border-radius:3px 3px 0 0;background:linear-gradient(to top,var(--blue),var(--teal));cursor:pointer;}
+.bar:hover{opacity:.8;}
+.bar-label{font-size:9px;color:var(--ink-60);text-align:center;margin-top:3px;}
+
+/* Bottom mobile nav for dashboard -->*/
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);z-index:900;padding:8px 0 env(safe-area-inset-bottom,8px);}
+.mobile-bottom-nav-inner{display:flex;justify-content:space-around;align-items:center;}
+.mob-nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:600;color:var(--ink-60);cursor:pointer;border:none;background:transparent;padding:6px 12px;border-radius:10px;font-family:var(--font-body);transition:all .15s;}
+.mob-nav-btn svg{width:20px;height:20px;}
+.mob-nav-btn.active{color:var(--blue);}
+
+/* ═══════════════════════════════════════════════════════
+   CATALOGUE
+═══════════════════════════════════════════════════════ */
+.catalogue-layout{padding-top:60px;min-height:100svh;background:var(--surface);}
+.catalogue-header{background:#fff;border-bottom:1px solid var(--border);padding:24px 0;}
+.search-bar{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;max-width:560px;transition:border-color .2s;}
+.search-bar:focus-within{border-color:var(--blue);}
+.search-bar input{flex:1;border:none;outline:none;font-size:14px;font-family:var(--font-body);color:var(--ink);min-width:0;}
+.search-bar input::placeholder{color:var(--ink-30);}
+.filter-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.filter-chip{font-size:12px;font-weight:500;padding:6px 14px;border-radius:50px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .15s;color:var(--ink-60);}
+.filter-chip:hover,.filter-chip.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+.catalogue-body{padding:24px 0;}
+.courses-grid-cat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+
+/* ═══════════════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════════════ */
+.quiz-layout{padding-top:60px;min-height:100svh;background:var(--surface);display:flex;align-items:flex-start;justify-content:center;padding-bottom:32px;}
+.quiz-container{width:100%;max-width:640px;padding:24px 16px;}
+.quiz-card{background:#fff;border-radius:var(--radius-lg);border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow-lg);}
+.quiz-header{background:linear-gradient(135deg,var(--blue),#0D3C9E);padding:20px 22px;color:#fff;}
+.quiz-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:12px;}
+.quiz-course{font-size:11px;opacity:.75;margin-bottom:3px;}
+.quiz-title{font-family:var(--font-display);font-size:18px;font-weight:800;}
+.timer-box{background:rgba(255,255,255,.15);border-radius:10px;padding:7px 14px;text-align:center;min-width:74px;flex-shrink:0;}
+.timer-label{font-size:9px;opacity:.7;margin-bottom:1px;text-transform:uppercase;letter-spacing:.06em;}
+.timer-val{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:.04em;}
+.quiz-progress{margin-top:14px;}
+.quiz-progress-label{display:flex;justify-content:space-between;font-size:11px;opacity:.75;margin-bottom:5px;}
+.quiz-progress-bar{height:3px;background:rgba(255,255,255,.2);border-radius:2px;}
+.quiz-progress-fill{height:3px;background:#fff;border-radius:2px;transition:width .4s;}
+.quiz-dots{display:flex;gap:5px;margin-top:8px;}
+.quiz-dot{width:24px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);}
+.quiz-dot.done{background:#fff;}
+.quiz-dot.current{background:var(--teal);}
+.quiz-body{padding:22px 20px;}
+.question-num{font-size:11px;font-weight:600;color:var(--ink-30);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px;}
+.question-text{font-family:var(--font-display);font-size:17px;font-weight:700;line-height:1.4;margin-bottom:20px;color:var(--ink);}
+.options-list{display:flex;flex-direction:column;gap:10px;}
+.option{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:12px;border:1.5px solid var(--border);cursor:pointer;transition:all .2s;font-size:14px;font-weight:500;color:var(--ink);}
+.option:hover{border-color:var(--blue);background:var(--blue-light);}
+.option.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue);}
+.option.correct{border-color:#1A7A3F;background:#E8F8EE;color:#1A7A3F;}
+.option.wrong{border-color:#DC2626;background:#FEF2F2;color:#DC2626;}
+.option-letter{width:28px;height:28px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:12px;font-weight:700;flex-shrink:0;transition:all .2s;}
+.option.selected .option-letter{background:var(--blue);color:#fff;}
+.option.correct .option-letter{background:#1A7A3F;color:#fff;}
+.option.wrong .option-letter{background:#DC2626;color:#fff;}
+.quiz-footer{padding:16px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.result-card{text-align:center;padding:32px 20px;}
+.result-score-ring{width:130px;height:130px;margin:0 auto 20px;position:relative;}
+.result-score-ring svg{transform:rotate(-90deg);}
+.result-score-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.result-score-num{font-family:var(--font-display);font-size:34px;font-weight:800;color:var(--blue);}
+.result-score-label{font-size:11px;color:var(--ink-60);}
+.result-breakdown{background:var(--surface);border-radius:var(--radius);padding:14px;margin:16px 0;text-align:left;}
+.result-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);gap:8px;}
+.result-row:last-child{border-bottom:none;}
+
+/* ═══════════════════════════════════════════════════════
+   INSTRUCTOR
+═══════════════════════════════════════════════════════ */
+.instructor-layout{padding-top:60px;min-height:100svh;background:var(--surface);}
+.instructor-grid{display:grid;grid-template-columns:220px 1fr;min-height:calc(100svh - 60px);}
+.instructor-main{padding:24px;}
+.admin-header{background:linear-gradient(135deg,var(--ink) 0%,#1A2744 100%);padding:24px;color:#fff;margin-bottom:20px;border-radius:var(--radius-lg);}
+.data-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);}
+.data-table th{background:var(--surface);padding:10px 14px;font-size:11px;font-weight:700;color:var(--ink-60);text-align:left;text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--border);}
+.data-table td{padding:12px 14px;font-size:13px;border-bottom:1px solid var(--border);color:var(--ink);}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:var(--blue-light);}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════════ */
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:28px;}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — TABLET (≤900px)
+═══════════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .courses-grid{grid-template-columns:repeat(2,1fr);}
+  .courses-grid-cat{grid-template-columns:repeat(2,1fr);}
+  .steps-grid{grid-template-columns:repeat(2,1fr);}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .dash-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .hero-content{gap:32px;}
+  .hero h1{font-size:38px;}
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — MOBILE (≤640px)
+═══════════════════════════════════════════════════════ */
+@media(max-width:640px){
+  /* Nav */
+  .nav-links{display:none;}
+  .nav-actions{display:none;}
+  .nav-hamburger{display:flex;}
+
+  /* Hero: single column */
+  .hero-content{grid-template-columns:1fr;padding:48px 20px 60px;}
+  .hero-visual{display:none;}
+  .hero h1{font-size:34px;}
+  .hero p{font-size:15px;}
+  .hero-stats{gap:16px;}
+  .stat-num{font-size:22px;}
+
+  /* Courses: 1 column */
+  .courses-grid{grid-template-columns:1fr;}
+  .courses-grid-cat{grid-template-columns:1fr;}
+
+  /* Steps: 1 column */
+  .steps-grid{grid-template-columns:1fr;gap:20px;margin-top:32px;}
+
+  /* Section header */
+  .section-header h2{font-size:28px;}
+  .section{padding:48px 0;}
+
+  /* Dashboard: hide sidebar, show bottom nav */
+  .dash-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .dash-main{padding:16px 16px 80px;}
+  .stats-row{grid-template-columns:repeat(2,1fr);gap:10px;}
+  .stat-card-val{font-size:22px;}
+  .dash-grid{grid-template-columns:1fr;}
+  .dash-header{flex-direction:column;gap:10px;}
+  .dash-header .btn{width:100%;}
+  .mobile-bottom-nav{display:block;}
+  .enrolled-item{padding:12px;}
+  .enrolled-icon{width:38px;height:38px;font-size:17px;}
+
+  /* Instructor: hide sidebar */
+  .instructor-grid{grid-template-columns:1fr;}
+  .instructor-grid .sidebar{display:none;}
+  .instructor-main{padding:16px 16px 80px;}
+  .admin-header{padding:20px;}
+  /* Table: scrollable on mobile */
+  .data-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .data-table{min-width:560px;}
+
+  /* Quiz */
+  .quiz-container{padding:16px 12px;}
+  .quiz-body{padding:18px 16px;}
+  .quiz-footer{flex-wrap:wrap;gap:8px;}
+  .quiz-footer .btn{flex:1;min-width:0;font-size:12px;}
+
+  /* Catalogue */
+  .catalogue-header{padding:18px 0;}
+
+  /* Footer */
+  .footer-grid{grid-template-columns:1fr;}
+
+  /* CTA section */
+  .cta-actions{flex-direction:column;align-items:center;}
+  .cta-actions .btn{width:100%;max-width:280px;}
+
+  /* Toast */
+  .toast{font-size:13px;padding:10px 16px;}
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE — SMALL MOBILE (≤380px)
+═══════════════════════════════════════════════════════ */
+@media(max-width:380px){
+  .hero h1{font-size:28px;}
+  .section-header h2{font-size:24px;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .filter-row{gap:6px;}
+  .filter-chip{font-size:11px;padding:5px 10px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
+
+<!-- ════ NAV ════ -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" onclick="showPage('home')">Edu<span>Next</span></a>
+    <div class="nav-links">
+      <button class="nav-link active" id="nav-home" onclick="showPage('home')">Home</button>
+      <button class="nav-link" id="nav-catalogue" onclick="showPage('catalogue')">Courses</button>
+      <button class="nav-link" id="nav-dashboard" onclick="showPage('dashboard')">Dashboard</button>
+      <button class="nav-link" id="nav-quiz" onclick="showPage('quiz')">Quiz Demo</button>
+      <button class="nav-link" id="nav-instructor" onclick="showPage('instructor')">Instructor</button>
+    </div>
+    <div class="nav-actions">
+      <button class="btn btn-outline" onclick="showToast('Already logged in as Rashedul Islam Jisan!')">Log in</button>
+      <button class="btn btn-primary" onclick="showPage('dashboard')">Dashboard →</button>
+    </div>
+    <button class="nav-hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="nav-drawer">
+  <button class="nav-drawer-link active" id="drawer-home" onclick="showPage('home');closeDrawer()">🏠  Home</button>
+  <button class="nav-drawer-link" id="drawer-catalogue" onclick="showPage('catalogue');closeDrawer()">📚  Courses</button>
+  <button class="nav-drawer-link" id="drawer-dashboard" onclick="showPage('dashboard');closeDrawer()">📊  Dashboard</button>
+  <button class="nav-drawer-link" id="drawer-quiz" onclick="showPage('quiz');closeDrawer()">📝  Quiz Demo</button>
+  <button class="nav-drawer-link" id="drawer-instructor" onclick="showPage('instructor');closeDrawer()">👨‍🏫  Instructor</button>
+  <div class="nav-drawer-actions">
+    <button class="btn btn-outline" onclick="showToast('Already logged in!');closeDrawer()">Log in</button>
+    <button class="btn btn-primary" onclick="showPage('dashboard');closeDrawer()">Dashboard →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-blob hero-blob1"></div>
+      <div class="hero-blob hero-blob2"></div>
+    </div>
+    <div class="hero-content">
+      <div class="fade-up">
+        <div class="hero-eyebrow">Now live — EduNext v1.0</div>
+        <h1>Learn, grow<br/>and <span class="gradient-text">track every step.</span></h1>
+        <p>Structured courses, interactive quizzes, and real-time progress tracking — designed for students who take their learning seriously.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="showPage('catalogue')">Browse courses →</button>
+          <button class="btn btn-outline" onclick="showPage('dashboard')">Dashboard</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">1,200+</div><div class="stat-label">Courses</div></div>
+          <div class="stat"><div class="stat-num">48k</div><div class="stat-label">Students</div></div>
+          <div class="stat"><div class="stat-num">4.8★</div><div class="stat-label">Rating</div></div>
+        </div>
+      </div>
+      <div class="hero-visual fade-up-2">
+        <div style="position:relative;padding:16px;">
+          <div class="hero-card-main">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <div>
+                <div style="font-family:var(--font-display);font-size:14px;font-weight:700;">My learning</div>
+                <div style="font-size:11px;color:var(--ink-60);">3 courses in progress</div>
+              </div>
+              <div class="badge badge-blue">Week 7</div>
+            </div>
+            <div class="course-preview-list">
+              <div class="course-preview-item" onclick="showPage('dashboard')">
+                <div class="course-icon" style="background:#EEF4FF;">💻</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:12px;font-weight:600;margin-bottom:3px;">Web Development 101</div>
+                  <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">75%</div>
+              </div>
+              <div class="course-preview-item" onclick="showPage('dashboard')">
+                <div class="course-icon" style="background:#F0FFF8;">🐍</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:12px;font-weight:600;margin-bottom:3px;">Python for Beginners</div>
+                  <div class="progress-bar-wrap"><div class="progress-bar" style="width:40%"></div></div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:var(--blue);flex-shrink:0;">40%</div>
+              </div>
+              <div class="course-preview-item" onclick="showPage('dashboard')">
+                <div class="course-icon" style="background:#FFF8F0;">🗄️</div>
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:12px;font-weight:600;margin-bottom:3px;">Database Design</div>
+                  <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+                </div>
+                <div style="font-size:12px;font-weight:700;color:var(--teal);flex-shrink:0;">✓</div>
+              </div>
+            </div>
+            <button class="btn btn-primary" onclick="showPage('quiz')" style="width:100%;margin-top:14px;">Take today's quiz →</button>
+          </div>
+          <div class="hero-float hero-float1 pulse">
+            <div style="width:26px;height:26px;border-radius:8px;background:#E8F8EE;display:flex;align-items:center;justify-content:center;font-size:13px;">🎯</div>
+            <div><div style="font-weight:700;font-size:12px;">Quiz score: 94%</div><div style="font-size:10px;color:var(--ink-60);">Web Dev Module 3</div></div>
+          </div>
+          <div class="hero-float hero-float2 pulse" style="animation-delay:.5s">
+            <div style="width:8px;height:8px;border-radius:50%;background:#1A7A3F;flex-shrink:0;"></div>
+            <div style="font-size:12px;">247 students online</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scrolling strip -->
+  <div class="features-strip">
+    <div class="strip-track">
+      <span class="strip-item"><span class="strip-dot"></span>Interactive quizzes</span>
+      <span class="strip-item"><span class="strip-dot"></span>Progress tracking</span>
+      <span class="strip-item"><span class="strip-dot"></span>1,200+ courses</span>
+      <span class="strip-item"><span class="strip-dot"></span>Instructor analytics</span>
+      <span class="strip-item"><span class="strip-dot"></span>Secure &amp; private</span>
+      <span class="strip-item"><span class="strip-dot"></span>IEEE standards</span>
+      <span class="strip-item"><span class="strip-dot"></span>WCAG 2.1 accessible</span>
+      <span class="strip-item"><span class="strip-dot"></span>Mobile-friendly</span>
+      <span class="strip-item"><span class="strip-dot"></span>Free to get started</span>
+      <span class="strip-item"><span class="strip-dot"></span>Interactive quizzes</span>
+      <span class="strip-item"><span class="strip-dot"></span>Progress tracking</span>
+      <span class="strip-item"><span class="strip-dot"></span>1,200+ courses</span>
+      <span class="strip-item"><span class="strip-dot"></span>Instructor analytics</span>
+      <span class="strip-item"><span class="strip-dot"></span>Secure &amp; private</span>
+      <span class="strip-item"><span class="strip-dot"></span>IEEE standards</span>
+      <span class="strip-item"><span class="strip-dot"></span>WCAG 2.1 accessible</span>
+      <span class="strip-item"><span class="strip-dot"></span>Mobile-friendly</span>
+      <span class="strip-item"><span class="strip-dot"></span>Free to get started</span>
+    </div>
+  </div>
+
+  <!-- Featured Courses -->
+  <section class="section" style="background:var(--surface);">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-blue" style="margin-bottom:10px;">Featured courses</div>
+        <h2>Start learning <span class="gradient-text">today</span></h2>
+        <p>Hand-picked courses across web development, data science, design, and more.</p>
+      </div>
+      <div class="courses-grid">
+        <div class="course-card" onclick="showPage('quiz')">
+          <div class="course-thumb" style="background:linear-gradient(135deg,#1A6BFF 0%,#00B8A0 100%);">💻</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="badge badge-blue">Web Dev</span><span class="stars">★★★★★</span></div>
+            <div class="course-title">Web Development 101</div>
+            <div class="course-instructor">by Faisal Shahriar · 12 modules</div>
+            <div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div>
+            <div style="font-size:11px;color:var(--blue);font-weight:600;margin-top:4px;">75% complete</div>
+            <div class="course-footer"><span class="course-modules">⏱ 8.5 hrs</span><span style="font-size:12px;font-weight:700;color:var(--teal);">Free</span></div>
+          </div>
+        </div>
+        <div class="course-card" onclick="showPage('catalogue')">
+          <div class="course-thumb" style="background:linear-gradient(135deg,#6366F1 0%,#1A6BFF 100%);">🐍</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="badge badge-teal">Python</span><span class="stars">★★★★☆</span></div>
+            <div class="course-title">Python for Beginners</div>
+            <div class="course-instructor">by Rashedul Islam Jisan · 8 modules</div>
+            <div class="progress-bar-wrap"><div class="progress-bar" style="width:40%"></div></div>
+            <div style="font-size:11px;color:var(--blue);font-weight:600;margin-top:4px;">40% complete</div>
+            <div class="course-footer"><span class="course-modules">⏱ 6 hrs</span><span style="font-size:12px;font-weight:700;color:var(--teal);">Free</span></div>
+          </div>
+        </div>
+        <div class="course-card" onclick="showPage('catalogue')">
+          <div class="course-thumb" style="background:linear-gradient(135deg,#D97706 0%,#DC4A26 100%);">🗄️</div>
+          <div class="course-body">
+            <div class="course-meta"><span class="badge badge-orange">Database</span><span class="stars">★★★★★</span></div>
+            <div class="course-title">Database Design Mastery</div>
+            <div class="course-instructor">by Rashedul Islam Jisan · 10 modules</div>
+            <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%"></div></div>
+            <div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:4px;">✓ Completed</div>
+            <div class="course-footer"><span class="course-modules">⏱ 10 hrs</span><span style="font-size:12px;font-weight:700;color:var(--teal);">Free</span></div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:28px;">
+        <button class="btn btn-outline" onclick="showPage('catalogue')">View all 1,200+ courses →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <div class="badge badge-teal" style="margin-bottom:10px;">Simple process</div>
+        <h2>How EduNext <span class="gradient-text">works</span></h2>
+        <p>Three steps to transform your learning journey.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step fade-up-1">
+          <div class="step-num">1</div>
+          <h3>Create your account</h3>
+          <p>Sign up for free in seconds. Choose your learning goals and we'll personalise your experience from day one.</p>
+        </div>
+        <div class="step fade-up-2">
+          <div class="step-num">2</div>
+          <h3>Enrol in courses</h3>
+          <p>Browse 1,200+ structured courses across web development, data science, design, and more. Enrol with one click.</p>
+        </div>
+        <div class="step fade-up-3">
+          <div class="step-num">3</div>
+          <h3>Track your progress</h3>
+          <p>Complete modules, take interactive quizzes, and watch your progress dashboard update in real time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:linear-gradient(135deg,var(--blue) 0%,#0D3C9E 100%);padding:64px 0;">
+    <div class="container" style="text-align:center;">
+      <h2 style="color:#fff;font-size:32px;font-weight:800;margin-bottom:14px;">Ready to start learning?</h2>
+      <p style="color:rgba(255,255,255,.75);font-size:16px;margin-bottom:28px;">Join 48,000+ students already learning on EduNext.</p>
+      <div class="cta-actions" style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-white" onclick="showPage('catalogue')">Browse courses →</button>
+        <button class="btn" onclick="showPage('dashboard')" style="color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:12px 24px;border-radius:50px;">View dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background:var(--ink);color:#fff;padding:40px 0;">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div style="font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:10px;">Edu<span style="color:var(--teal);">Next</span></div>
+          <p style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;">A web-based online learning platform built for PRT581 Principles of Software Systems — Charles Darwin University.</p>
+          <div style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.4);">Group 25: Faisal Shahriar · Rashedul Islam Jisan</div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">Platform</div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:rgba(255,255,255,.6);">
+            <span style="cursor:pointer;" onclick="showPage('catalogue')">Courses</span>
+            <span style="cursor:pointer;" onclick="showPage('dashboard')">Dashboard</span>
+            <span style="cursor:pointer;" onclick="showPage('quiz')">Quizzes</span>
+            <span style="cursor:pointer;" onclick="showPage('instructor')">Instructors</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">Tech stack</div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:rgba(255,255,255,.6);">
+            <span>HTML5 / CSS3</span><span>JavaScript</span><span>PHP 8.1</span><span>MySQL 8.0</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px;">Legal</div>
+          <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:rgba(255,255,255,.6);">
+            <span>Privacy Policy</span><span>Terms of Service</span><span>Accessibility</span>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,.1);padding-top:16px;font-size:11px;color:rgba(255,255,255,.4);">
+        © 2026 EduNext — PRT581 Group 25 · Charles Darwin University
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════════════════════
+     STUDENT DASHBOARD
+════════════════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <div class="dash-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">Edu<span>Next</span></div>
+      <div class="sidebar-section">Main menu</div>
+      <button class="sidebar-item active" onclick="showToast('You are on the Dashboard')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+      </button>
+      <button class="sidebar-item" onclick="showPage('catalogue')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>My Courses
+      </button>
+      <button class="sidebar-item" onclick="showPage('quiz')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Take a Quiz
+      </button>
+      <button class="sidebar-item" onclick="showToast('Analytics coming in v2.0!')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics
+      </button>
+      <button class="sidebar-item" onclick="showToast('Certificates coming soon!')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>Certificates
+      </button>
+      <div class="sidebar-section">Account</div>
+      <button class="sidebar-item" onclick="showToast('Settings coming in v2.0!')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </button>
+      <div style="margin-top:auto;padding-top:20px;">
+        <div class="sidebar-avatar">
+          <div class="avatar-circle">RJ</div>
+          <div><div class="avatar-name">Rashedul Islam Jisan</div><div class="avatar-role">Student</div></div>
+        </div>
+      </div>
+    </aside>
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <div class="dash-title">Good morning! 👋</div>
+          <div class="dash-subtitle">You have 2 courses in progress — keep going!</div>
+        </div>
+        <button class="btn btn-primary" onclick="showPage('catalogue')">Browse courses →</button>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-card-label">Courses enrolled</div><div class="stat-card-val">3</div><div class="stat-card-change">↑ 1 this month</div></div>
+        <div class="stat-card"><div class="stat-card-label">Quizzes completed</div><div class="stat-card-val">7</div><div class="stat-card-change">↑ 3 this week</div></div>
+        <div class="stat-card"><div class="stat-card-label">Average score</div><div class="stat-card-val">82%</div><div class="stat-card-change">↑ 4% vs last week</div></div>
+        <div class="stat-card"><div class="stat-card-label">Hours learned</div><div class="stat-card-val">24h</div><div class="stat-card-change">↑ 6h this week</div></div>
+      </div>
+      <div class="dash-grid">
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div style="font-family:var(--font-display);font-size:16px;font-weight:700;">My courses</div>
+            <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="showPage('catalogue')">+ Enrol more</button>
+          </div>
+          <div class="enrolled-list">
+            <div class="enrolled-item" onclick="showPage('quiz')">
+              <div class="enrolled-icon" style="background:#EEF4FF;">💻</div>
+              <div class="enrolled-info">
+                <div class="enrolled-title">Web Development 101</div>
+                <div class="enrolled-meta">Module 9 of 12 · Faisal Shahriar</div>
+                <div style="margin-top:6px;"><div class="enrolled-pct">75%</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:75%"></div></div></div>
+              </div>
+              <span class="badge badge-blue" style="flex-shrink:0;">Active</span>
+            </div>
+            <div class="enrolled-item" onclick="showPage('quiz')">
+              <div class="enrolled-icon" style="background:#F0FFF8;">🐍</div>
+              <div class="enrolled-info">
+                <div class="enrolled-title">Python for Beginners</div>
+                <div class="enrolled-meta">Module 3 of 8 · Rashedul Islam Jisan</div>
+                <div style="margin-top:6px;"><div class="enrolled-pct">40%</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:40%"></div></div></div>
+              </div>
+              <span class="badge badge-blue" style="flex-shrink:0;">Active</span>
+            </div>
+            <div class="enrolled-item" onclick="showToast('Certificate available for download!')">
+              <div class="enrolled-icon" style="background:#FFF0F0;">🗄️</div>
+              <div class="enrolled-info">
+                <div class="enrolled-title">Database Design Mastery</div>
+                <div class="enrolled-meta">All 10 modules completed</div>
+                <div style="margin-top:6px;"><div class="enrolled-pct" style="color:var(--teal);">100%</div><div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:linear-gradient(90deg,var(--teal-dark),var(--teal))"></div></div></div>
+              </div>
+              <span class="badge badge-green" style="flex-shrink:0;">Done ✓</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="widget-card">
+            <div class="widget-title">Recent quiz results</div>
+            <div class="quiz-result-item"><div><div style="font-weight:600;font-size:12px;">CSS Fundamentals</div><div style="font-size:10px;color:var(--ink-60);">Web Dev 101</div></div><span class="score-pill score-high">94%</span></div>
+            <div class="quiz-result-item"><div><div style="font-weight:600;font-size:12px;">Functions &amp; Loops</div><div style="font-size:10px;color:var(--ink-60);">Python Beginners</div></div><span class="score-pill score-high">88%</span></div>
+            <div class="quiz-result-item"><div><div style="font-weight:600;font-size:12px;">ER Diagrams</div><div style="font-size:10px;color:var(--ink-60);">Database Design</div></div><span class="score-pill score-mid">72%</span></div>
+            <div class="quiz-result-item"><div><div style="font-weight:600;font-size:12px;">SQL Joins</div><div style="font-size:10px;color:var(--ink-60);">Database Design</div></div><span class="score-pill score-high">91%</span></div>
+            <button class="btn btn-primary" onclick="showPage('quiz')" style="width:100%;margin-top:12px;font-size:13px;">Take next quiz →</button>
+          </div>
+          <div class="widget-card">
+            <div class="widget-title">Weekly progress</div>
+            <div class="chart-bars">
+              <div><div class="bar" style="height:32px;"></div><div class="bar-label">M</div></div>
+              <div><div class="bar" style="height:50px;"></div><div class="bar-label">T</div></div>
+              <div><div class="bar" style="height:24px;"></div><div class="bar-label">W</div></div>
+              <div><div class="bar" style="height:66px;"></div><div class="bar-label">T</div></div>
+              <div><div class="bar" style="height:40px;"></div><div class="bar-label">F</div></div>
+              <div><div class="bar" style="height:76px;"></div><div class="bar-label">S</div></div>
+              <div><div class="bar" style="height:16px;opacity:.4;"></div><div class="bar-label">S</div></div>
+            </div>
+            <div style="font-size:11px;color:var(--ink-60);margin-top:6px;">Total this week: <strong>18 hrs</strong></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <button class="mob-nav-btn active" onclick="showToast('Dashboard')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Home
+      </button>
+      <button class="mob-nav-btn" onclick="showPage('catalogue')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Courses
+      </button>
+      <button class="mob-nav-btn" onclick="showPage('quiz')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Quiz
+      </button>
+      <button class="mob-nav-btn" onclick="showPage('instructor')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Instructor
+      </button>
+    </div>
+  </nav>
+</div>
+
+<!-- ════════════════════════════════════════════
+     COURSE CATALOGUE
+════════════════════════════════════════════ -->
+<div class="page" id="page-catalogue">
+  <div class="catalogue-layout">
+    <div class="catalogue-header">
+      <div class="container">
+        <h1 style="font-size:28px;font-weight:800;margin-bottom:6px;">Course catalogue</h1>
+        <p style="color:var(--ink-60);font-size:14px;margin-bottom:16px;">1,200+ courses across web development, data science, design, and more.</p>
+        <div class="search-bar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" placeholder="Search courses, topics, instructors..." id="search-input" oninput="filterCourses()"/>
+        </div>
+        <div class="filter-row" id="filter-row">
+          <button class="filter-chip active" data-cat="all" onclick="setFilter('all')">All</button>
+          <button class="filter-chip" data-cat="webdev" onclick="setFilter('webdev')">Web Dev</button>
+          <button class="filter-chip" data-cat="python" onclick="setFilter('python')">Python</button>
+          <button class="filter-chip" data-cat="database" onclick="setFilter('database')">Database</button>
+          <button class="filter-chip" data-cat="design" onclick="setFilter('design')">Design</button>
+          <button class="filter-chip" data-cat="security" onclick="setFilter('security')">Security</button>
+        </div>
+      </div>
+    </div>
+    <div class="catalogue-body">
+      <div class="container">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+          <div style="font-size:13px;color:var(--ink-60);" id="count-label">Showing all 9 courses</div>
+          <select style="font-size:12px;padding:7px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;" onchange="showToast('Sorted!')">
+            <option>Sort: Newest first</option>
+            <option>Sort: Highest rated</option>
+            <option>Sort: Most enrolled</option>
+          </select>
+        </div>
+        <div class="courses-grid-cat" id="courses-grid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     QUIZ PAGE
+════════════════════════════════════════════ -->
+<div class="page" id="page-quiz">
+  <div class="quiz-layout">
+    <div class="quiz-container">
+      <div style="text-align:center;margin-bottom:16px;">
+        <div class="badge badge-blue">Module 9 · Web Development 101</div>
+        <h2 style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-top:8px;">CSS Fundamentals Quiz</h2>
+      </div>
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-header">
+          <div class="quiz-header-top">
+            <div>
+              <div class="quiz-course">Web Development 101 · Module 9</div>
+              <div class="quiz-title">CSS Fundamentals</div>
+            </div>
+            <div class="timer-box">
+              <div class="timer-label">Time left</div>
+              <div class="timer-val" id="quiz-timer">10:00</div>
+            </div>
+          </div>
+          <div class="quiz-progress">
+            <div class="quiz-progress-label"><span id="q-label">Question 1 of 5</span><span id="q-answered">0 answered</span></div>
+            <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="q-fill" style="width:0%"></div></div>
+          </div>
+          <div class="quiz-dots" id="q-dots"></div>
+        </div>
+        <div class="quiz-body" id="quiz-body"></div>
+        <div class="quiz-footer" id="quiz-footer">
+          <button class="btn btn-outline" id="btn-prev" onclick="prevQ()" style="font-size:12px;padding:9px 16px;">← Prev</button>
+          <span style="font-size:11px;color:var(--ink-60);text-align:center;" id="footer-status">Select an answer</span>
+          <button class="btn btn-primary" id="btn-next" onclick="nextQ()" style="font-size:12px;padding:9px 16px;">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     INSTRUCTOR DASHBOARD
+════════════════════════════════════════════ -->
+<div class="page" id="page-instructor">
+  <div class="instructor-layout">
+    <div class="instructor-grid">
+      <aside class="sidebar">
+        <div class="sidebar-logo">Edu<span>Next</span></div>
+        <div class="sidebar-section">Instructor menu</div>
+        <button class="sidebar-item active" onclick="showToast('Instructor Dashboard')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard
+        </button>
+        <button class="sidebar-item" onclick="showToast('Course editor coming in v2.0!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Course editor
+        </button>
+        <button class="sidebar-item" onclick="showToast('Student list coming in v2.0!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>My students
+        </button>
+        <button class="sidebar-item" onclick="showToast('Analytics export coming in v2.0!')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Analytics
+        </button>
+        <div style="margin-top:auto;padding-top:20px;">
+          <div class="sidebar-avatar">
+            <div class="avatar-circle" style="background:linear-gradient(135deg,#6366F1,#1A6BFF);">FS</div>
+            <div><div class="avatar-name">Faisal Shahriar</div><div class="avatar-role">Instructor</div></div>
+          </div>
+        </div>
+      </aside>
+      <main class="instructor-main">
+        <div class="admin-header">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:11px;opacity:.6;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em;">Instructor Portal</div>
+              <h1 style="font-family:var(--font-display);font-size:22px;font-weight:800;">Welcome back, Faisal 👨‍🏫</h1>
+              <p style="opacity:.65;font-size:13px;margin-top:4px;">Your 3 courses have 148 enrolled students</p>
+            </div>
+            <button class="btn btn-white" onclick="showToast('Course editor launching soon!')">+ New course</button>
+          </div>
+        </div>
+        <div class="stats-row" style="margin-bottom:20px;">
+          <div class="stat-card"><div class="stat-card-label">Total courses</div><div class="stat-card-val">3</div><div class="stat-card-change">2 published · 1 draft</div></div>
+          <div class="stat-card"><div class="stat-card-label">Total students</div><div class="stat-card-val">148</div><div class="stat-card-change">↑ 12 this week</div></div>
+          <div class="stat-card"><div class="stat-card-label">Avg quiz score</div><div class="stat-card-val">82%</div><div class="stat-card-change">↑ 3% this month</div></div>
+          <div class="stat-card"><div class="stat-card-label">Course rating</div><div class="stat-card-val">4.8★</div><div class="stat-card-change">688 reviews</div></div>
+        </div>
+        <div style="background:#fff;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:20px;">
+          <div style="padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-family:var(--font-display);font-size:15px;font-weight:700;">My courses</div>
+            <button class="btn btn-outline" style="font-size:11px;padding:6px 14px;" onclick="showToast('Course editor launching soon!')">+ New course</button>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Course name</th><th>Students</th><th>Avg score</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><strong>Web Development 101</strong><br/><span style="font-size:10px;color:var(--ink-60);">12 modules · 8.5h</span></td>
+                  <td>72</td><td style="color:#1A7A3F;font-weight:700;">86%</td>
+                  <td><span class="badge badge-green">Published</span></td>
+                  <td><button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="showToast('Course editor launching soon!')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>UI/UX Design Basics</strong><br/><span style="font-size:10px;color:var(--ink-60);">8 modules · 6h</span></td>
+                  <td>48</td><td style="color:#C45E00;font-weight:700;">78%</td>
+                  <td><span class="badge badge-green">Published</span></td>
+                  <td><button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="showToast('Course editor launching soon!')">Edit</button></td>
+                </tr>
+                <tr>
+                  <td><strong>Advanced JavaScript</strong><br/><span style="font-size:10px;color:var(--ink-60);">14 modules · 12h</span></td>
+                  <td>28</td><td style="color:var(--ink-60);">—</td>
+                  <td><span class="badge badge-orange">Draft</span></td>
+                  <td><button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="showToast('Course editor launching soon!')">Edit</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div style="background:#fff;border-radius:var(--radius);border:1px solid var(--border);">
+          <div style="padding:16px 18px;border-bottom:1px solid var(--border);">
+            <div style="font-family:var(--font-display);font-size:15px;font-weight:700;">Top students — Web Development 101</div>
+          </div>
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Student name</th><th>Progress</th><th>Quiz avg</th><th>Last active</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Rashedul Islam Jisan</strong></td><td>92%</td><td style="color:#1A7A3F;font-weight:700;">91%</td><td>Yesterday</td><td><span class="badge badge-blue">Active</span></td></tr>
+                <tr><td><strong>Maria Santos</strong></td><td>100%</td><td style="color:#1A7A3F;font-weight:700;">96%</td><td>3 days ago</td><td><span class="badge badge-green">Completed</span></td></tr>
+                <tr><td><strong>Ahmed Al-Rashid</strong></td><td>45%</td><td style="color:#C45E00;font-weight:700;">74%</td><td>1 week ago</td><td><span class="badge badge-orange">Inactive</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+// ── PAGE ROUTING ──
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const nl=document.getElementById('nav-'+id);
+  if(nl) nl.classList.add('active');
+  // update drawer links
+  document.querySelectorAll('.nav-drawer-link').forEach(l=>l.classList.remove('active'));
+  const dl=document.getElementById('drawer-'+id);
+  if(dl) dl.classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='quiz') initQuiz();
+}
+
+// ── HAMBURGER / DRAWER ──
+function toggleDrawer(){
+  const d=document.getElementById('nav-drawer');
+  const h=document.getElementById('hamburger');
+  d.classList.toggle('open');
+  h.classList.toggle('open');
+}
+function closeDrawer(){
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+}
+// Close drawer on outside tap
+document.addEventListener('click',e=>{
+  const drawer=document.getElementById('nav-drawer');
+  const hamburger=document.getElementById('hamburger');
+  if(drawer.classList.contains('open') && !drawer.contains(e.target) && !hamburger.contains(e.target)){
+    closeDrawer();
+  }
+});
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ── CATALOGUE DATA ──
+const allCourses=[
+  {id:1,title:'Web Development 101',instructor:'Faisal Shahriar',cat:'webdev',emoji:'💻',gradient:'linear-gradient(135deg,#1A6BFF 0%,#00B8A0 100%)',rating:'★★★★★',modules:12,hours:8.5,students:72,tag:'Web Dev',tagClass:'badge-blue',enrolled:true,progress:75},
+  {id:2,title:'Python for Beginners',instructor:'Rashedul Islam Jisan',cat:'python',emoji:'🐍',gradient:'linear-gradient(135deg,#6366F1 0%,#1A6BFF 100%)',rating:'★★★★☆',modules:8,hours:6,students:48,tag:'Python',tagClass:'badge-teal',enrolled:true,progress:40},
+  {id:3,title:'Database Design Mastery',instructor:'Rashedul Islam Jisan',cat:'database',emoji:'🗄️',gradient:'linear-gradient(135deg,#D97706 0%,#DC4A26 100%)',rating:'★★★★★',modules:10,hours:10,students:340,tag:'Database',tagClass:'badge-orange',enrolled:true,progress:100},
+  {id:4,title:'UI/UX Design Fundamentals',instructor:'Faisal Shahriar',cat:'design',emoji:'🎨',gradient:'linear-gradient(135deg,#EC4899 0%,#8B5CF6 100%)',rating:'★★★★★',modules:9,hours:7,students:210,tag:'Design',tagClass:'badge-blue',enrolled:false,progress:0},
+  {id:5,title:'Cybersecurity Essentials',instructor:'Rashedul Islam Jisan',cat:'security',emoji:'🔐',gradient:'linear-gradient(135deg,#111827 0%,#1F2937 100%)',rating:'★★★★☆',modules:11,hours:9,students:95,tag:'Security',tagClass:'badge-teal',enrolled:false,progress:0},
+  {id:6,title:'Advanced JavaScript',instructor:'Faisal Shahriar',cat:'webdev',emoji:'⚡',gradient:'linear-gradient(135deg,#F59E0B 0%,#D97706 100%)',rating:'★★★★★',modules:14,hours:12,students:28,tag:'Web Dev',tagClass:'badge-blue',enrolled:false,progress:0},
+  {id:7,title:'Data Science with Python',instructor:'Rashedul Islam Jisan',cat:'python',emoji:'📊',gradient:'linear-gradient(135deg,#10B981 0%,#0D9488 100%)',rating:'★★★★☆',modules:15,hours:14,students:180,tag:'Python',tagClass:'badge-teal',enrolled:false,progress:0},
+  {id:8,title:'MySQL & PostgreSQL',instructor:'Rashedul Islam Jisan',cat:'database',emoji:'🏛️',gradient:'linear-gradient(135deg,#6366F1 0%,#4F46E5 100%)',rating:'★★★★★',modules:8,hours:7,students:124,tag:'Database',tagClass:'badge-orange',enrolled:false,progress:0},
+  {id:9,title:'Responsive Web Design',instructor:'Faisal Shahriar',cat:'design',emoji:'📱',gradient:'linear-gradient(135deg,#0EA5E9 0%,#6366F1 100%)',rating:'★★★★☆',modules:7,hours:5,students:89,tag:'Design',tagClass:'badge-blue',enrolled:false,progress:0},
+];
+let currentFilter='all',currentSearch='';
+function renderCourses(){
+  const grid=document.getElementById('courses-grid');
+  if(!grid) return;
+  let filtered=allCourses.filter(c=>{
+    const matchCat=currentFilter==='all'||c.cat===currentFilter;
+    const matchSearch=c.title.toLowerCase().includes(currentSearch.toLowerCase())||c.instructor.toLowerCase().includes(currentSearch.toLowerCase());
+    return matchCat&&matchSearch;
+  });
+  document.getElementById('count-label').textContent=`Showing ${filtered.length} of ${allCourses.length} courses`;
+  grid.innerHTML=filtered.map(c=>`
+    <div class="course-card" onclick="${c.enrolled?`showToast('Continuing ${c.title}...')`:`enrollCourse(${c.id})`}">
+      <div class="course-thumb" style="background:${c.gradient};">${c.emoji}</div>
+      <div class="course-body">
+        <div class="course-meta"><span class="badge ${c.tagClass}">${c.tag}</span><span class="stars">${c.rating}</span></div>
+        <div class="course-title">${c.title}</div>
+        <div class="course-instructor">by ${c.instructor} · ${c.modules} modules</div>
+        ${c.enrolled?`<div class="progress-bar-wrap"><div class="progress-bar" style="width:${c.progress}%"></div></div><div style="font-size:11px;font-weight:600;color:${c.progress===100?'var(--teal)':'var(--blue)'};margin-top:3px;">${c.progress===100?'✓ Completed':`${c.progress}% complete`}</div>`:''}
+        <div class="course-footer">
+          <span class="course-modules">⏱ ${c.hours}h · ${c.students} enrolled</span>
+          ${c.enrolled?`<span class="badge badge-blue">Enrolled</span>`:`<span style="font-size:12px;font-weight:700;color:var(--teal);">Free</span>`}
+        </div>
+        ${!c.enrolled?`<button class="btn btn-primary" onclick="event.stopPropagation();enrollCourse(${c.id})" style="width:100%;margin-top:10px;font-size:13px;">Enrol now →</button>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+function enrollCourse(id){
+  const c=allCourses.find(x=>x.id===id);
+  if(c){c.enrolled=true;c.progress=0;}
+  renderCourses();
+  showToast(`Enrolled in "${c.title}"!`);
+}
+function setFilter(cat){
+  currentFilter=cat;
+  document.querySelectorAll('.filter-chip').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat));
+  renderCourses();
+}
+function filterCourses(){
+  currentSearch=document.getElementById('search-input').value;
+  renderCourses();
+}
+
+// ── QUIZ ENGINE ──
+const questions=[
+  {q:'Which CSS property changes the text color of an element?',opts:['background-color','color','font-color','text-color'],answer:1},
+  {q:'What does the CSS "box model" consist of?',opts:['Content, padding, border, margin','Header, body, footer, sidebar','Width, height, position, display','Font, color, spacing, border'],answer:0},
+  {q:'Which CSS selector targets elements with a specific class?',opts:['#className','.className','*className','@className'],answer:1},
+  {q:'What is the default value of the CSS "position" property?',opts:['relative','absolute','fixed','static'],answer:3},
+  {q:'Which unit is relative to the font size of the root element?',opts:['px','em','rem','vh'],answer:2},
+];
+let qIndex=0,answers={},quizTimer=null,quizDone=false,seconds=600;
+function initQuiz(){
+  qIndex=0;answers={};quizDone=false;seconds=600;
+  if(quizTimer) clearInterval(quizTimer);
+  renderQuestion();
+  startTimer();
+}
+function startTimer(){
+  quizTimer=setInterval(()=>{
+    seconds--;
+    const m=Math.floor(seconds/60),s=seconds%60;
+    const el=document.getElementById('quiz-timer');
+    if(el) el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    if(el&&seconds<=60) el.style.color='#FCA5A5';
+    if(seconds<=0){clearInterval(quizTimer);submitQuiz();}
+  },1000);
+}
+function renderQuestion(){
+  if(quizDone) return;
+  const q=questions[qIndex];
+  const answered=Object.keys(answers).length;
+  document.getElementById('q-label').textContent=`Question ${qIndex+1} of ${questions.length}`;
+  document.getElementById('q-answered').textContent=`${answered} answered`;
+  document.getElementById('q-fill').style.width=`${(answered/questions.length)*100}%`;
+  document.getElementById('footer-status').textContent=answers[qIndex]!==undefined?'Answer selected':'Select an answer';
+  const dots=document.getElementById('q-dots');
+  dots.innerHTML=questions.map((_,i)=>`<div class="quiz-dot ${i<qIndex?'done':''} ${i===qIndex?'current':''}"></div>`).join('');
+  document.getElementById('quiz-body').innerHTML=`
+    <div class="question-num">Question ${qIndex+1} of ${questions.length}</div>
+    <div class="question-text">${q.q}</div>
+    <div class="options-list">
+      ${q.opts.map((opt,i)=>`
+        <div class="option ${answers[qIndex]===i?'selected':''}" onclick="selectAnswer(${i})">
+          <div class="option-letter">${['A','B','C','D'][i]}</div>
+          <span>${opt}</span>
+        </div>`).join('')}
+    </div>`;
+  const prev=document.getElementById('btn-prev');
+  const next=document.getElementById('btn-next');
+  if(prev) prev.style.visibility=qIndex===0?'hidden':'visible';
+  if(next){
+    if(qIndex===questions.length-1){next.textContent='Submit ✓';next.onclick=submitQuiz;next.style.background='#1A7A3F';}
+    else{next.textContent='Next →';next.onclick=nextQ;next.style.background='';}
+  }
+}
+function selectAnswer(i){answers[qIndex]=i;renderQuestion();}
+function nextQ(){if(qIndex<questions.length-1){qIndex++;renderQuestion();}}
+function prevQ(){if(qIndex>0){qIndex--;renderQuestion();}}
+function submitQuiz(){
+  if(quizTimer) clearInterval(quizTimer);
+  quizDone=true;
+  let correct=0;
+  questions.forEach((q,i)=>{if(answers[i]===q.answer) correct++;});
+  const pct=Math.round((correct/questions.length)*100);
+  const pass=pct>=70;
+  document.getElementById('quiz-body').innerHTML=`
+    <div class="result-card">
+      <div class="result-score-ring">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="54" fill="none" stroke="#EEF4FF" stroke-width="10"/>
+          <circle cx="65" cy="65" r="54" fill="none" stroke="${pass?'var(--teal)':'#DC2626'}" stroke-width="10"
+            stroke-dasharray="${Math.round(339*pct/100)} 339" stroke-linecap="round"/>
+        </svg>
+        <div class="result-score-text">
+          <div class="result-score-num" style="color:${pass?'var(--blue)':'#DC2626'}">${pct}%</div>
+          <div class="result-score-label">${pass?'Passed ✓':'Try again'}</div>
+        </div>
+      </div>
+      <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:6px;">${pass?'Great work! 🎉':'Keep practising!'}</h3>
+      <p style="color:var(--ink-60);font-size:13px;margin-bottom:14px;">You got ${correct} out of ${questions.length} correct.</p>
+      <div class="result-breakdown">
+        ${questions.map((q,i)=>`<div class="result-row"><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${q.q.substring(0,38)}…</span><span style="flex-shrink:0;">${answers[i]===q.answer?'✅':'❌'}</span></div>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('quiz-footer').innerHTML=`
+    <button class="btn btn-outline" onclick="initQuiz()" style="font-size:12px;padding:9px 16px;">Retake</button>
+    <button class="btn btn-primary" onclick="showPage('dashboard')" style="font-size:12px;padding:9px 16px;">Dashboard →</button>`;
+  document.getElementById('quiz-timer').textContent='Done!';
+  document.getElementById('quiz-timer').style.color='#A7F3D0';
+}
+// ── INIT ──
+renderCourses();
+</script>
+</body>
+</html>
